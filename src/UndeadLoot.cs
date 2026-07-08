@@ -191,6 +191,8 @@ namespace UndeadLoot
             // Use the game's global loot strings so the corpse prompt matches every other
             // container. Config/Localization.csv recolors those strings for the whole game
             // (Okabe-Ito colorblind-safe palette): green = fresh, orange = opened, gray = empty.
+            // The Activate key hint ({0}, e.g. "(E)") is tinted sky blue game-wide by
+            // Patch_ActivateKeyColor below, so it stays consistent across every prompt.
             // Untouched until first opened; OnLockedLocal flips bag.Touched on open.
             string fmtKey = bag.IsEmpty() ? "lootTooltipEmpty" : (bag.Touched ? "lootTooltipTouched" : "lootTooltipNew");
             __result = string.Format(Localization.Get(fmtKey, false), key, name);
@@ -219,6 +221,29 @@ namespace UndeadLoot
             if (!Corpse.IsLootableBody(__instance)) return true;
             __result = true;
             return false;
+        }
+    }
+
+    // Colour the Activate ("Use") key hint - e.g. "(E)" - sky blue in EVERY prompt the game
+    // renders. XUiUtils.GetBindingXuiMarkupString is the single point that turns a key binding
+    // into on-screen markup, and every use prompt (workstations, doors, pickups, vehicles, NPCs,
+    // dew collectors, containers, ...) fills its {0} from it. Tinting the result here makes the
+    // colour truly game-wide, instead of chasing individual Localization.csv strings one by one.
+    // Only the Activate action is touched - other key hints (reload, jump, ...) are left alone.
+    // Both PlayerActionsLocal.Activate and PlayerActionsPermanent.Activate are created as
+    // CreatePlayerAction("Activate"), so matching on the action Name catches both.
+    [HarmonyPatch(typeof(XUiUtils), "GetBindingXuiMarkupString", new Type[] {
+        typeof(InControl.PlayerAction), typeof(XUiUtils.EmptyBindingStyle),
+        typeof(XUiUtils.DisplayStyle), typeof(string) })]
+    public static class Patch_ActivateKeyColor
+    {
+        const string KeyColor = "56B4E9"; // Okabe-Ito sky blue, matches the loot-prompt palette
+
+        public static void Postfix(InControl.PlayerAction _action, ref string __result)
+        {
+            if (_action == null || string.IsNullOrEmpty(__result)) return;
+            if (_action.Name != "Activate") return;
+            __result = "[" + KeyColor + "]" + __result + "[-]";
         }
     }
 }

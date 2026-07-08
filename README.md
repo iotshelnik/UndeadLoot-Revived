@@ -24,8 +24,8 @@ requires code, so this version ships a small Harmony DLL.
   corpse. It's the actual body, not a spawned block or bag.
 - **Color-coded loot prompts, game-wide** — instant state recognition using the colorblind-safe
   [Okabe–Ito palette](https://jfly.uni-koeln.de/color/), applied to **all** containers,
-  corpses, and doors: 🟢 green = untouched / unlocked, 🟠 orange = opened, ⚪ gray = empty,
-  🔴 red = locked. Adds an "Opened" state vanilla lacks and gives locked vs unlocked doors
+  corpses, doors, workstations, and pickup prompts: 🟢 green = untouched / unlocked, 🟠 orange = opened, ⚪ gray = empty,
+  🔴 red = locked, with the 🔵 blue action-key hint (E) on every use prompt. Adds an "Opened" state vanilla lacks and gives locked vs unlocked doors
   distinct colors (vanilla uses the same color for both). Editable in `Config/Localization.csv`.
 - **Static POI corpses are lootable.**
 - **Every humanoid zombie type & tier** — feral / radiated / **charged** / **infernal**.
@@ -75,6 +75,12 @@ The compiled `UndeadLoot.dll` is copied into `../UndeadLoot/`. Zip the `UndeadLo
   link to the original source."* See [LICENSE](LICENSE).
 
 ## Changelog
+
+### 1.2.0
+- The Activate ("Use") key hint — e.g. `(E)` — is now colored sky blue on **every** interaction
+  prompt game-wide (workstations, doors, pickups, vehicles, NPCs, dew collectors, containers, and
+  more), not just loot prompts. Done at the source via a Harmony patch on the key-binding markup,
+  so it also follows your Use-key rebinding. Other key hints (reload, jump, …) are left untouched.
 
 ### 1.1.0
 - Game-wide color-coded loot prompts (colorblind-safe Okabe–Ito palette; green/orange/gray for
