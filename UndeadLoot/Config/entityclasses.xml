@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  UndeadLoot / entityclasses.xml  (v3.0)
+
+  Keeps defeated zombie bodies around long enough to walk over and loot them.
+  The DLL turns the actual corpse into a lootable body (no block, no bag entity);
+  this just extends how long that body persists before the game despawns it.
+  Most zombies inherit this value from zombieTemplateMale.
+
+  (The original LootListOnDeath property was removed from the v3.0 engine, so the
+  lootable body is created in code by the DLL instead.)
+-->
+<configs>
+	<set xpath="/entity_classes/entity_class[@name='zombieTemplateMale']/property[@name='TimeStayAfterDeath']/@value">300</set>
+</configs>

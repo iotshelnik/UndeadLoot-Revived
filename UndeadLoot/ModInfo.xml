@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  UndeadLoot Revived - a V3.0 rework of "UndeadLoot" by 7ModsToDead.
+
+  The original (pure-XML) mod stopped working in 7 Days to Die V3.0 because the
+  game removed the XML hooks it relied on. This version restores the same feature
+  set with a small Harmony DLL, and loots the ACTUAL zombie body (no decoy block).
+
+  Original mod & loot design: 7ModsToDead - https://www.patreon.com/7modstodead
+  Used and modified under the original's license: free to use and modify with credit.
+
+  Requires EasyAntiCheat to be OFF (this is a DLL/Harmony mod).
+-->
+<xml>
+	<Name value="UndeadLootRevived" />
+	<DisplayName value="UndeadLoot Revived" />
+	<Description value="Loot the actual bodies of defeated zombies and static corpses. A V3.0 rework of UndeadLoot by 7ModsToDead. Requires EAC off." />
+	<Author value="Rework by (your name) - original by 7ModsToDead" />
+	<Website value="https://www.patreon.com/7modstodead" />
+	<Version value="1.1.0" />
+</xml>

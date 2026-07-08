@@ -1,0 +1,21 @@
+UndeadLoot Revived
+==================
+
+This is a community rework of "UndeadLoot" by 7ModsToDead, updated for 7 Days to Die V3.0.
+
+Original mod, concept, and loot tables:
+    7ModsToDead  -  https://www.patreon.com/7modstodead
+
+The original mod was published under these terms:
+    "This mod is free to use and modify, but please credit the author and provide a
+     link to the original source."
+
+This rework is distributed under those same terms. You may use, modify, and redistribute
+it provided that you:
+  - credit 7ModsToDead as the original author and link to the original mod, and
+  - credit this rework (iotshelnik) and link back to this repository.
+
+V3.0 rework (code and mechanics): iotshelnik
+
+Bundled third-party component:
+  - 0Harmony.dll (Harmony by Andreas Pardeike) - MIT License - https://github.com/pardeike/Harmony

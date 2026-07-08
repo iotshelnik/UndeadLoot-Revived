@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Build with:  dotnet build -c Release
+    Set the game's Managed folder either by editing <GameManaged> below or by passing it:
+      dotnet build -c Release -p:GameManaged="/path/to/7 Days To Die/7DaysToDie_Data/Managed"
+    The compiled UndeadLoot.dll is copied into ../UndeadLoot/ for packaging.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyName>UndeadLoot</AssemblyName>
+    <RootNamespace>UndeadLoot</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>true</Deterministic>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <NoWarn>MSB3277;CS1701;CS1702</NoWarn>
+
+    <!-- EDIT THIS to your local install (or override on the command line). -->
+    <GameManaged Condition="'$(GameManaged)' == ''">$(HOME)/.local/share/Steam/steamapps/common/7 Days To Die/7DaysToDie_Data/Managed</GameManaged>
+    <!-- Harmony is bundled with the mod; reference the copy in the packaged folder. -->
+    <HarmonyDll>$(MSBuildProjectDirectory)/../UndeadLoot/0Harmony.dll</HarmonyDll>
+
+    <OutputPath>bin/</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="mscorlib"><HintPath>$(GameManaged)/mscorlib.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="netstandard"><HintPath>$(GameManaged)/netstandard.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="System"><HintPath>$(GameManaged)/System.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="System.Core"><HintPath>$(GameManaged)/System.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="System.Runtime"><HintPath>$(GameManaged)/System.Runtime.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(GameManaged)/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp-firstpass"><HintPath>$(GameManaged)/Assembly-CSharp-firstpass.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(GameManaged)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(GameManaged)/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="InControl"><HintPath>$(GameManaged)/InControl.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>$(HarmonyDll)</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+
+  <!-- Copy the built DLL into the packaged mod folder. -->
+  <Target Name="CopyToMod" AfterTargets="Build">
+    <Copy SourceFiles="$(OutputPath)/UndeadLoot.dll" DestinationFolder="$(MSBuildProjectDirectory)/../UndeadLoot" />
+  </Target>
+
+</Project>

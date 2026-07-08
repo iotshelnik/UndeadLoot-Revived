@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  UndeadLoot / blocks.xml  (v3.0)
+
+  Makes the vanilla STATIC human corpse blocks (the POI "decoy" corpses) lootable.
+  In v3.0 the old block Class="Loot" no longer exists; loot blocks are now
+  Class="CompositeTileEntity" with a nested TEFeatureStorage feature.
+  goreBlockHumanCorpse1/2/3 (+Offset) all Extend the base below with no exclusions,
+  so they inherit this and become lootable too.
+
+  Defeated (killed) zombies are handled entirely by the DLL, which makes the actual
+  dead body lootable - no blocks are placed for them.
+-->
+<configs>
+
+	<append xpath="/blocks/block[@name='goreBlockHumanCorpse']">
+		<property name="Class" value="CompositeTileEntity" />
+		<property class="CompositeFeatures">
+			<property class="TEFeatureStorage">
+				<property name="LootList" value="groupZombieCorpse" />
+			</property>
+		</property>
+	</append>
+
+</configs>

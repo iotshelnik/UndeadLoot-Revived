@@ -1,0 +1,9 @@
+# Build output
+src/bin/
+src/obj/
+bin/
+obj/
+*.user
+
+# Packaged release archives (attach these to GitHub Releases instead)
+*.zip

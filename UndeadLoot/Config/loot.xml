@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  UndeadLoot / loot.xml  (v3.0)
+
+  Loot groups & containers - carried over unchanged from the original 1.0.1 mod.
+  Every referenced group and loot_prob_template was verified to still exist in
+  the v3.0 vanilla loot.xml, so these tables are fully compatible.
+
+  Original loot design: 7ModsToDead ( https://www.patreon.com/7modstodead )
+-->
+<configs>
+
+	<append xpath="/lootcontainers">
+
+		<!-- Loot group for zombies cop -->
+		<lootgroup name="groupCops">
+			<!-- Weapons -->
+			<item group="groupWeaponsAllScaled" loot_prob_template="med" />
+			<item group="groupWeaponModsScaled" />
+			<item group="weaponParts" />
+
+			<!-- Ammo -->
+			<item group="groupAmmoResourcesSmall" />
+			<item group="groupAmmoResourcesMedium" />
+			<item group="groupAmmoResourcesLarge" />
+			<item group="groupAmmoSmall" />
+			<item group="groupAmmoMedium" />
+			<item group="groupAmmoLarge" />
+
+			<!-- Clothing -->
+			<item group="groupArmorScaled" />
+		</lootgroup>
+
+
+		<!-- Loot group for zombies soldier -->
+		<lootgroup name="groupSoldier">
+			<!-- Loot cops -->
+			<item group="groupCops" loot_prob_template="high"/>
+
+			<!-- Weapons -->
+			<item group="groupWeaponsRangedScaled" loot_prob_template="low"/>
+
+			<!-- Ammo -->
+			<item group="groupArmorScaled" loot_prob_template="low" />
+		</lootgroup>
+
+
+		<!-- Loot group for zombies default -->
+		<lootgroup name="groupZombie">
+			<!-- Seeds -->
+			<item group="seeds" loot_prob_template="low"/>
+			<item group="seedsNoFlowers" loot_prob_template="low"/>
+
+			<!-- Food -->
+			<item group="groupFoodTrashCommon" loot_prob_template="high"/> <!-- Trash -->
+			<item group="groupFoodCommon" loot_prob_template="low"/> <!-- Food basic -->
+			<item group="groupFoodPileCommon" loot_prob_template="low"/> <!-- Food basic -->
+			<item group="groupFoodUncommon" loot_prob_template="veryLow"/> <!-- Food basic -->
+			<item group="cannedfood" loot_prob_template="low"/> <!-- Food basic -->
+
+			<!-- Drinks -->
+			<item group="groupDrinksCommon" loot_prob_template="med"/> <!-- Drinks basic -->
+			<item group="groupDrinksUncommon" loot_prob_template="low"/> <!-- Drinks basic -->
+			<item group="groupDrinksRare" loot_prob_template="veryLow"/> <!-- Drinks basic -->
+
+			<!-- Cops loot -->
+			<item group="groupCops" count="1,2" loot_prob_template="veryLow"/>
+
+			<!-- Money -->
+			<item name="oldCash" count="1,500" loot_prob_template="low"/>
+
+			<!-- Books -->
+			<item group="perkBooks" loot_prob_template="low"/>
+			<item group="skillMagazines" loot_prob_template="low"/>
+			<item group="groupMilitaryBooks" loot_prob_template="veryLow"/>
+
+			<!-- Medical -->
+			<item group="groupMedicalPileSmall" loot_prob_template="low"/>
+			<item group="groupMedicalPileMed" loot_prob_template="veryLow"/>
+			<item group="groupMedicalPileLarge" loot_prob_template="veryLow"/>
+
+			<!-- Mods -->
+			<item group="schematicsModsAndGeneralCommon" loot_prob_template="low"/>
+			<item group="schematicsModsAndGeneralRare" loot_prob_template="veryLow"/>
+			<item group="groupModAllScaled" loot_prob_template="veryLow"/>
+
+			<!-- Vehicle mods -->
+			<item group="vehicleModSchematics" loot_prob_template="low"/>
+			<item group="schematicsVehiclesCommon" loot_prob_template="low"/>
+			<item group="schematicsVehiclesRare" loot_prob_template="veryLow"/>
+
+			<!-- Electrical -->
+			<item group="groupElectricalDevices" loot_prob_template="low"/>
+
+			<!-- Candy -->
+			<item group="foodCandy" loot_prob_template="veryLow"/>
+
+			<!-- Tools -->
+			<item group="groupWorkingStiffsCrate" loot_prob_template="low"/>
+		</lootgroup>
+
+
+		<!-- Loot container for zombie corpse (static POI corpses) -->
+		<lootcontainer name="groupZombieCorpse" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupZombie" loot_prob_template="low" />
+		</lootcontainer>
+
+
+		<!-- Loot container business zombies -->
+		<lootcontainer name="groupZombieBusinessMan" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupZombie" loot_prob_template="high" />
+			<!-- Money -->
+			<item name="oldCash" count="100,1000" loot_prob_template="veryLow"/>
+			<item name="casinoCoin" count="100,500" loot_prob_template="low"/>
+		</lootcontainer>
+
+		<lootcontainer name="groupZombieBusinessManFeral" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupZombie" loot_prob_template="med" />
+			<!-- Money -->
+			<item name="oldCash" count="100,1250" loot_prob_template="low"/>
+			<item name="casinoCoin" count="100,750" loot_prob_template="low"/>
+		</lootcontainer>
+
+		<lootcontainer name="groupZombieBusinessManRadiated" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupZombie" loot_prob_template="low" />
+			<!-- Money -->
+			<item name="oldCash" count="100,2000" loot_prob_template="low"/>
+			<item name="casinoCoin" count="100,1000" loot_prob_template="low"/>
+		</lootcontainer>
+
+
+		<!-- Loot container nurse zombies -->
+		<lootcontainer name="groupZombieNurse" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<!-- Medical -->
+			<item group="groupMedicalCommon" loot_prob_template="high"/>
+			<item group="groupMedicalUncommon" loot_prob_template="med"/>
+			<item group="groupMedicalRare" loot_prob_template="veryLow"/>
+		</lootcontainer>
+
+		<lootcontainer name="groupZombieNurseFeral" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<!-- Medical -->
+			<item group="groupMedicalCommon" loot_prob_template="med"/>
+			<item group="groupMedicalUncommon" loot_prob_template="high"/>
+			<item group="groupMedicalRare" loot_prob_template="low"/>
+		</lootcontainer>
+
+		<lootcontainer name="groupZombieNurseRadiated" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<!-- Medical -->
+			<item group="groupMedicalCommon" loot_prob_template="low"/>
+			<item group="groupMedicalUncommon" loot_prob_template="med"/>
+			<item group="groupMedicalRare" loot_prob_template="high"/>
+		</lootcontainer>
+
+
+		<!-- Loot container cops -->
+		<lootcontainer name="groupZombiesCops" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupCops" loot_prob_template="low"/>
+		</lootcontainer>
+
+		<lootcontainer name="groupZombiesCopsFeral" count="1,5" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupCops" loot_prob_template="med"/>
+		</lootcontainer>
+
+		<lootcontainer name="groupZombieFatCopRadiated" count="3,5" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupCops" loot_prob_template="high"/>
+		</lootcontainer>
+
+
+		<!-- Loot container soldiers -->
+		<lootcontainer name="groupZombieSoldier" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupSoldier" loot_prob_template="low"/>
+		</lootcontainer>
+
+		<lootcontainer name="groupZombieSoldierFeral" count="1,5" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupSoldier" loot_prob_template="med"/>
+		</lootcontainer>
+
+		<lootcontainer name="groupZombieSoldierRadiated" count="3,5" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupSoldier" loot_prob_template="high"/>
+		</lootcontainer>
+
+
+		<!-- Loot container generic zombies -->
+		<lootcontainer name="groupZombies" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupZombie" />
+		</lootcontainer>
+
+
+		<!-- Hazmat zombies: chemistry / hazardous materials theme -->
+		<lootcontainer name="groupZombieHazmat" count="1,3" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupZombie" loot_prob_template="low"/>
+			<item name="resourceAcid" count="1,3" loot_prob_template="med"/>
+			<item name="resourceOil" count="1,3" loot_prob_template="low"/>
+			<item name="resourcePotassiumNitratePowder" count="2,6" loot_prob_template="low"/>
+			<item group="groupMedicalCommon" loot_prob_template="low"/>
+		</lootcontainer>
+
+
+		<!-- Wight: elite / tough zombie, richer combat + medical -->
+		<lootcontainer name="groupZombieWight" count="1,4" size="6,3" sound_open="UseActions/open_backpack" sound_close="UseActions/close_backpack" open_time="1" loot_quality_template="qualBaseTemplate">
+			<item group="groupZombie" loot_prob_template="high"/>
+			<item group="groupCops" loot_prob_template="med"/>
+			<item group="groupMedicalUncommon" loot_prob_template="low"/>
+		</lootcontainer>
+
+	</append>
+
+</configs>
