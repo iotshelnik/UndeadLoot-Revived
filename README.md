@@ -37,7 +37,7 @@ requires code, so this version ships a small Harmony DLL.
 
 | Untouched (green) | Opened (orange) | Empty (gray) | Loot the real body |
 |---|---|---|---|
-| ![Untouched prompt](media/gallery_1_untouched.jpg) | ![Opened prompt](media/gallery_2_opened.jpg) | ![Empty prompt](media/gallery_3_empty.jpg) | ![Loot window](media/gallery_4_loot.jpg) |
+| ![Untouched prompt](media/gallery_1_untouched.png) | ![Opened prompt](media/gallery_2_opened.png) | ![Empty prompt](media/gallery_3_empty.png) | ![Loot window](media/gallery_4_loot.png) |
 
 ## Requirements
 
