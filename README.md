@@ -6,7 +6,7 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
 chest, no fake body spawned next to it — you loot the real ragdoll where it fell. Static
 corpses lying around in POIs are lootable too.
 
-![Search a defeated zombie](media/v11_featured.jpg)
+![UndeadLoot Revived](media/featured.png)
 
 ---
 
@@ -35,9 +35,9 @@ requires code, so this version ships a small Harmony DLL.
   table, or themed by name, e.g. a modded "…Nurse" gets medical loot).
 - Loot respects loot stage / game scaling. Corpses stay harvestable as before.
 
-| Untouched | Opened | Empty | Themed loot |
+| Untouched (green) | Opened (orange) | Empty (gray) | Loot the real body |
 |---|---|---|---|
-| ![](media/v11_gallery_1_untouched.jpg) | ![](media/v11_gallery_2_opened.jpg) | ![](media/v11_gallery_4_empty.jpg) | ![](media/v11_gallery_3_storage.jpg) |
+| ![Untouched prompt](media/gallery_1_untouched.jpg) | ![Opened prompt](media/gallery_2_opened.jpg) | ![Empty prompt](media/gallery_3_empty.jpg) | ![Loot window](media/gallery_4_loot.jpg) |
 
 ## Requirements
 
