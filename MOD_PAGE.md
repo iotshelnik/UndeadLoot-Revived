@@ -18,7 +18,7 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
   - 🟠 **Orange** = opened
   - ⚪ **Gray** = empty
   - 🔴 **Red** = locked
-- **Blue action-key hint** — the Use key (e.g. `(E)`) is tinted sky blue on **every** interaction prompt in the game, and follows your key rebinding. Other hints (reload, jump, …) are left alone.
+- **Configurable action-key hint** — the Use key (e.g. `(E)`) is tinted sky blue by default on **every** interaction prompt in the game, and follows your key rebinding. Change `activateKeyColor` in `Config/Localization.csv` to any six-digit RGB hex color. Other hints (reload, jump, …) are left alone.
 - **Static POI corpses are lootable.**
 - **Every humanoid zombie type & tier** — feral / radiated / **charged** / **infernal**.
 - **Per-type loot** — cops/mutated (weapons, ammo), soldiers/demolishers, nurses (medical), businessmen (money), hazmat (chemistry), wights (elite), and a balanced generic default.
@@ -47,6 +47,9 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
 - Used and modified under the original's terms — _"free to use and modify, with credit and a link to the original source."_
 
 ## Changelog
+
+**1.2.1**
+- The game-wide Use-key color can now be changed with `activateKeyColor` in `Config/Localization.csv`. Invalid values fall back safely to the default sky blue.
 
 **1.2.0**
 - The Use key hint — e.g. `(E)` — is now colored sky blue on **every** interaction prompt game-wide (workstations, doors, pickups, vehicles, NPCs, containers, and more), not just loot prompts. Done at the source, so it follows your Use-key rebinding.

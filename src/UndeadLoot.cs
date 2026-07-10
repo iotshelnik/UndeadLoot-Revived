@@ -237,13 +237,28 @@ namespace UndeadLoot
         typeof(XUiUtils.DisplayStyle), typeof(string) })]
     public static class Patch_ActivateKeyColor
     {
-        const string KeyColor = "56B4E9"; // Okabe-Ito sky blue, matches the loot-prompt palette
+        const string DefaultKeyColor = "56B4E9";
+
+        static string GetKeyColor()
+        {
+            string color = Localization.Get("activateKeyColor", false);
+            if (!string.IsNullOrEmpty(color)) color = color.Trim().TrimStart('#');
+            if (color == null || color.Length != 6) return DefaultKeyColor;
+
+            for (int i = 0; i < color.Length; i++)
+            {
+                char c = color[i];
+                if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
+                      (c >= 'A' && c <= 'F'))) return DefaultKeyColor;
+            }
+            return color;
+        }
 
         public static void Postfix(InControl.PlayerAction _action, ref string __result)
         {
             if (_action == null || string.IsNullOrEmpty(__result)) return;
             if (_action.Name != "Activate") return;
-            __result = "[" + KeyColor + "]" + __result + "[-]";
+            __result = "[" + GetKeyColor() + "]" + __result + "[-]";
         }
     }
 }

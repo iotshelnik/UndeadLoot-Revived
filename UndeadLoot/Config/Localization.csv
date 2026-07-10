@@ -1,4 +1,5 @@
 Key,english
+activateKeyColor,56B4E9
 lootTooltipNew,{0} Search {1} ([009E73]Untouched[-])
 lootTooltipTouched,{0} Search {1} ([E69F00]Opened[-])
 lootTooltipEmpty,[7F7F7F]Empty {1}[-]

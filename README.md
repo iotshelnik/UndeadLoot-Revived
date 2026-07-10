@@ -26,7 +26,8 @@ requires code, so this version ships a small Harmony DLL.
   [Okabe–Ito palette](https://jfly.uni-koeln.de/color/), applied to **all** containers,
   corpses, doors, workstations, and pickup prompts: 🟢 green = untouched / unlocked, 🟠 orange = opened, ⚪ gray = empty,
   🔴 red = locked, with the 🔵 blue action-key hint (E) on every use prompt. Adds an "Opened" state vanilla lacks and gives locked vs unlocked doors
-  distinct colors (vanilla uses the same color for both). Editable in `Config/Localization.csv`.
+  distinct colors (vanilla uses the same color for both). All prompt colors, including the action-key
+  hint, are editable in `Config/Localization.csv`.
 - **Static POI corpses are lootable.**
 - **Every humanoid zombie type & tier** — feral / radiated / **charged** / **infernal**.
 - **Per-type loot** — cops/mutated (weapons, ammo), soldiers/demolishers, nurses (medical),
@@ -75,6 +76,11 @@ The compiled `UndeadLoot.dll` is copied into `../UndeadLoot/`. Zip the `UndeadLo
   link to the original source."* See [LICENSE](LICENSE).
 
 ## Changelog
+
+### 1.2.1
+- The game-wide Activate-key color is now configurable through `activateKeyColor` in
+  `Config/Localization.csv`. Set it to any six-digit RGB hex value (with or without `#`); invalid
+  values safely fall back to the default sky blue (`56B4E9`).
 
 ### 1.2.0
 - The Activate ("Use") key hint — e.g. `(E)` — is now colored sky blue on **every** interaction
