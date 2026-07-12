@@ -1,8 +1,8 @@
 Key,english
 activateKeyColor,56B4E9
-lootTooltipNew,{0} Search {1} ([009E73]Untouched[-])
-lootTooltipTouched,{0} Search {1} ([E69F00]Opened[-])
+lootTooltipNew,{0} Search {1} [009E73](Untouched)[-]
+lootTooltipTouched,{0} Search {1} [E69F00](Opened)[-]
+lootEntity,{0} Search {1} [009E73](Untouched)[-]
+tooltipLocked,{0} Use {1} [D55E00](Locked)[-]
+tooltipUnlocked,{0} Use {1} [009E73](Unlocked)[-]
 lootTooltipEmpty,[7F7F7F]Empty {1}[-]
-lootEntity,{0} Search {1} ([009E73]Untouched[-])
-tooltipLocked,{0} Use {1} ([D55E00]Locked[-])
-tooltipUnlocked,{0} Use {1} ([009E73]Unlocked[-])
