@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.2
+
+- Fixed dedicated-server multiplayer corpse interaction for remote clients.
+- Replicated zombie corpses now receive local interaction state on every peer, allowing non-host
+  players to see the Use prompt and request the server-authoritative loot bag.
+- Verified with a separate game client connected to a dedicated server.
+
 ## 1.2.1
 
 - Made the game-wide Activate-key color configurable through `activateKeyColor` in

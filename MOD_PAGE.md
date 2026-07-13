@@ -48,6 +48,9 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
 
 ## Changelog
 
+**1.2.2**
+- Fixed dedicated-server multiplayer: remote clients can now see the Use prompt and loot zombie bodies. The server remains authoritative for corpse locking and loot synchronization.
+
 **1.2.1**
 - The game-wide Use-key color can now be changed with `activateKeyColor` in `Config/Localization.csv`. Invalid values fall back safely to the default sky blue.
 

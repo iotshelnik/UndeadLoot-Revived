@@ -77,6 +77,12 @@ The compiled `UndeadLoot.dll` is copied into `../UndeadLoot/`. Zip the `UndeadLo
 
 ## Changelog
 
+### 1.2.2
+- Fixed dedicated-server multiplayer: remote clients now initialize the replicated corpse
+  interaction state, so players who are not the host can see the Use prompt and loot bodies.
+- The server remains authoritative for corpse locking and loot synchronization. Verified with a
+  separate client connecting to a dedicated server, killing, and looting newly spawned zombies.
+
 ### 1.2.1
 - The game-wide Activate-key color is now configurable through `activateKeyColor` in
   `Config/Localization.csv`. Set it to any six-digit RGB hex value (with or without `#`); invalid

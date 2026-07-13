@@ -96,9 +96,13 @@ namespace UndeadLoot
         {
             try
             {
-                if (__instance == null || __instance.isEntityRemote) return; // server / host only
-                if (!Corpse.IsZombie(__instance)) return;                     // zombies only (incl. modded)
-                if (__instance.bag != null) return;                           // already set up
+                // OnEntityDeath runs for the authoritative entity and for its replicated copy on
+                // each client. Every peer needs this local interaction state so remote players can
+                // see and invoke the Search command. The normal LockManager flow remains server-
+                // authoritative and synchronizes the actual bag when it is opened.
+                if (__instance == null) return;
+                if (!Corpse.IsZombie(__instance)) return; // zombies only (incl. modded)
+                if (__instance.bag != null) return;       // already set up on this peer
 
                 World world = __instance.world;
                 if (world == null) return;
