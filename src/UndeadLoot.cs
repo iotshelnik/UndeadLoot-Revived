@@ -41,7 +41,7 @@ namespace UndeadLoot
             new Harmony("com.7modstodead.undeadloot").PatchAll(Assembly.GetExecutingAssembly());
 
             // Clear per-session instanced-loot data when a new world starts.
-            ModEvents.GameStartDone.RegisterHandler(InstancedCorpseLoot.ClearAll);
+            ModEvents.GameStartDone.RegisterHandler((ref ModEvents.SGameStartDoneData _) => InstancedCorpseLoot.ClearAll());
 
             Debug.Log("[UndeadLoot] Patches applied.");
         }
