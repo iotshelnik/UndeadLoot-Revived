@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.3.0
+
+- **Instanced multiplayer loot.** Each player who opens a zombie corpse now gets their own
+  personal loot roll from the same body. Players no longer compete over shared bag contents —
+  one player taking items has no effect on what another player finds. The body stays the body:
+  no bag, block, or entity is spawned. The loot is generated lazily on each player's first
+  open and saved across re-opens (remaining items persist if they close and re-open the body).
+- Activation text now reflects per-player state: green = *you* haven't opened this corpse yet,
+  orange = you have but items remain, gray = your loot is gone. Other players see their own
+  independent state on the same corpse.
+- **Compatible with InstancedLoot by Kobonator.** If both mods are installed, UndeadLoot
+  detects it at startup and skips its own instancing patches, deferring per-player loot
+  distribution to InstancedLoot. The combination works better than either mod alone:
+  UndeadLoot provides the lootable corpse, InstancedLoot handles distribution.
+- Loot data is cleared on world load/restart to prevent stale state across sessions.
+
 ## 1.2.2
 
 - Fixed dedicated-server multiplayer corpse interaction for remote clients.

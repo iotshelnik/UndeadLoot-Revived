@@ -22,6 +22,11 @@ requires code, so this version ships a small Harmony DLL.
 
 - **Loot the real defeated body** — press your Use key (E) on a dead zombie to search its
   corpse. It's the actual body, not a spawned block or bag.
+- **Instanced multiplayer loot** — in multiplayer each player gets their own independent loot
+  roll from the same zombie body. One player taking items has no effect on what another finds.
+  The corpse stays the corpse; no bag or extra entity is ever spawned.
+- **Per-player loot state** — green = *you* haven't opened this body yet, orange = you have but
+  items remain, gray = your loot is gone. Each player sees their own state on every corpse.
 - **Color-coded loot prompts, game-wide** — instant state recognition using the colorblind-safe
   [Okabe–Ito palette](https://jfly.uni-koeln.de/color/), applied to **all** containers,
   corpses, doors, workstations, and pickup prompts: 🟢 green = untouched / unlocked, 🟠 orange = opened, ⚪ gray = empty,
@@ -46,6 +51,14 @@ requires code, so this version ships a small Harmony DLL.
 - **EasyAntiCheat MUST be OFF** — DLL/Harmony mods do not load with EAC on.
 - Do not run alongside other mods that recolor loot text (e.g. ColoredLootText) — they fight
   over the same strings. UndeadLoot already does the coloring.
+
+### Compatibility
+
+| Mod | Works together? | Notes |
+|---|---|---|
+| **InstancedLoot** by Kobonator | ✅ Yes | UndeadLoot detects it and skips its own instancing; InstancedLoot handles per-player distribution. Both mods complement each other. |
+| Mods that add new zombie types | ✅ Yes | New zombies are looted automatically via the generic table, or themed by class name. |
+| ColoredLootText / similar | ⚠️ Conflict | Both fight over the same loot prompt strings. Don't use together. |
 
 ## Installation
 
@@ -76,6 +89,13 @@ The compiled `UndeadLoot.dll` is copied into `../UndeadLoot/`. Zip the `UndeadLo
   link to the original source."* See [LICENSE](LICENSE).
 
 ## Changelog
+
+### 1.3.0
+- **Instanced multiplayer loot** — each player gets their own independent loot roll per corpse.
+  Loot is generated lazily on first open, saved on close, cleared on world restart.
+- Activation text now shows per-player state (green/orange/gray relative to *you*, not the shared bag).
+- **InstancedLoot compatibility** — auto-detected at startup; instancing patches are skipped when
+  InstancedLoot is present, so both mods work together without conflict.
 
 ### 1.2.2
 - Fixed dedicated-server multiplayer: remote clients now initialize the replicated corpse

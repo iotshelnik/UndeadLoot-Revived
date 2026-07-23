@@ -13,6 +13,8 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
 ## Features
 
 - **Loot the real defeated body** — press your Use key (E) on a dead zombie to search its corpse. It's the actual body, not a spawned block or bag.
+- **Instanced multiplayer loot** — in multiplayer, each player gets their own independent loot roll from the same zombie corpse. No competing over shared bags. The body stays the body — nothing extra is spawned.
+- **Per-player loot state** — green = *you* haven't opened this body yet, orange = you have but items remain, gray = your loot is gone. Every player sees their own independent state on every corpse.
 - **Game-wide color-coded prompts** — instant state recognition with the colorblind-safe Okabe–Ito palette, applied to **all** containers, corpses, doors, workstations, and pickups:
   - 🟢 **Green** = untouched / unlocked
   - 🟠 **Orange** = opened
@@ -24,6 +26,10 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
 - **Per-type loot** — cops/mutated (weapons, ammo), soldiers/demolishers, nurses (medical), businessmen (money), hazmat (chemistry), wights (elite), and a balanced generic default.
 - **Modded-zombie friendly** — any zombie from another mod is looted automatically (generic table, or themed by name, e.g. a modded "…Nurse" gets medical loot).
 - Loot respects loot stage / game scaling. Corpses stay harvestable as before.
+
+## Compatibility
+
+**Works with InstancedLoot by Kobonator.** If both mods are installed, UndeadLoot detects InstancedLoot at startup and skips its own instancing, deferring per-player distribution to that mod. The combo works better than either alone: UndeadLoot provides the lootable corpse, InstancedLoot handles distribution across all container types.
 
 ## Requirements
 
@@ -47,6 +53,11 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
 - Used and modified under the original's terms — _"free to use and modify, with credit and a link to the original source."_
 
 ## Changelog
+
+**1.3.0**
+- Instanced multiplayer loot: each player gets their own independent loot roll per corpse. Loot is generated on first open, saved on close, cleared on world restart.
+- Activation text now shows per-player state rather than shared bag state.
+- Auto-detects InstancedLoot by Kobonator; instancing patches are skipped when it is present so both mods cooperate without conflict.
 
 **1.2.2**
 - Fixed dedicated-server multiplayer: remote clients can now see the Use prompt and loot zombie bodies. The server remains authoritative for corpse locking and loot synchronization.
