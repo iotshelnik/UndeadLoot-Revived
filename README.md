@@ -1,9 +1,9 @@
 # UndeadLoot Revived
 
-**A 7 Days to Die V3.0 rework of "UndeadLoot" by 7ModsToDead — loot the *actual* bodies of the dead.**
+**A 7 Days to Die V3.0 rework of "UndeadLoot" by 7ModsToDead - loot the *actual* bodies of the dead.**
 
 Kill a zombie, walk up to its corpse, and search it like any other container. No decoy
-chest, no fake body spawned next to it — you loot the real ragdoll where it fell. Static
+chest, no fake body spawned next to it - you loot the real ragdoll where it fell. Static
 corpses lying around in POIs are lootable too.
 
 ![UndeadLoot Revived](media/featured.png)
@@ -20,24 +20,24 @@ requires code, so this version ships a small Harmony DLL.
 
 ## Features
 
-- **Loot the real defeated body** — press your Use key (E) on a dead zombie to search its
+- **Loot the real defeated body** - press your Use key (E) on a dead zombie to search its
   corpse. It's the actual body, not a spawned block or bag.
-- **Instanced multiplayer loot** — in multiplayer each player gets their own independent loot
+- **Instanced multiplayer loot** - in multiplayer each player gets their own independent loot
   roll from the same zombie body. One player taking items has no effect on what another finds.
   The corpse stays the corpse; no bag or extra entity is ever spawned.
-- **Per-player loot state** — green = *you* haven't opened this body yet, orange = you have but
+- **Per-player loot state** - green = *you* haven't opened this body yet, orange = you have but
   items remain, gray = your loot is gone. Each player sees their own state on every corpse.
-- **Color-coded loot prompts, game-wide** — instant state recognition using the colorblind-safe
-  [Okabe–Ito palette](https://jfly.uni-koeln.de/color/), applied to **all** containers,
+- **Color-coded loot prompts, game-wide** - instant state recognition using the colorblind-safe
+  [Okabe-Ito palette](https://jfly.uni-koeln.de/color/), applied to **all** containers,
   corpses, doors, workstations, and pickup prompts: 🟢 green = untouched / unlocked, 🟠 orange = opened, ⚪ gray = empty,
   🔴 red = locked, with the 🔵 blue action-key hint (E) on every use prompt. Adds an "Opened" state vanilla lacks and gives locked vs unlocked doors
   distinct colors (vanilla uses the same color for both). All prompt colors, including the action-key
   hint, are editable in `Config/Localization.csv`.
 - **Static POI corpses are lootable.**
-- **Every humanoid zombie type & tier** — feral / radiated / **charged** / **infernal**.
-- **Per-type loot** — cops/mutated (weapons, ammo), soldiers/demolishers, nurses (medical),
+- **Every humanoid zombie type & tier** - feral / radiated / **charged** / **infernal**.
+- **Per-type loot** - cops/mutated (weapons, ammo), soldiers/demolishers, nurses (medical),
   businessmen (money), hazmat (chemistry), wights (elite), and a balanced generic default.
-- **Modded-zombie friendly** — any zombie from another mod is looted automatically (generic
+- **Modded-zombie friendly** - any zombie from another mod is looted automatically (generic
   table, or themed by name, e.g. a modded "…Nurse" gets medical loot).
 - Loot respects loot stage / game scaling. Corpses stay harvestable as before.
 
@@ -48,8 +48,8 @@ requires code, so this version ships a small Harmony DLL.
 ## Requirements
 
 - **7 Days to Die V3.0** (this is a code mod compiled for V3.0; a major game update may need a rebuild).
-- **EasyAntiCheat MUST be OFF** — DLL/Harmony mods do not load with EAC on.
-- Do not run alongside other mods that recolor loot text (e.g. ColoredLootText) — they fight
+- **EasyAntiCheat MUST be OFF** - DLL/Harmony mods do not load with EAC on.
+- Do not run alongside other mods that recolor loot text (e.g. ColoredLootText) - they fight
   over the same strings. UndeadLoot already does the coloring.
 
 ### Compatibility
@@ -85,19 +85,19 @@ The compiled `UndeadLoot.dll` is copied into `../UndeadLoot/`. Zip the `UndeadLo
 
 - **Original mod, concept, and loot tables:** [7ModsToDead](https://www.patreon.com/7modstodead)
 - **V3.0 rework (code + mechanics):** iotshelnik
-- Used and modified under the original's terms — *"free to use and modify, with credit and a
+- Used and modified under the original's terms - *"free to use and modify, with credit and a
   link to the original source."* See [LICENSE](LICENSE).
 
 ## Changelog
 
 ### 1.3.1
-- Fixed activation text staying orange after taking all items — prompt now goes gray immediately on close.
+- Fixed activation text staying orange after taking all items - prompt now goes gray immediately on close.
 
 ### 1.3.0
-- **Instanced multiplayer loot** — each player gets their own independent loot roll per corpse.
+- **Instanced multiplayer loot** - each player gets their own independent loot roll per corpse.
   Loot is generated lazily on first open, saved on close, cleared on world restart.
 - Activation text now shows per-player state (green/orange/gray relative to *you*, not the shared bag).
-- **InstancedLoot compatibility** — auto-detected at startup; instancing patches are skipped when
+- **InstancedLoot compatibility** - auto-detected at startup; instancing patches are skipped when
   InstancedLoot is present, so both mods work together without conflict.
 
 ### 1.2.2
@@ -112,13 +112,13 @@ The compiled `UndeadLoot.dll` is copied into `../UndeadLoot/`. Zip the `UndeadLo
   values safely fall back to the default sky blue (`56B4E9`).
 
 ### 1.2.0
-- The Activate ("Use") key hint — e.g. `(E)` — is now colored sky blue on **every** interaction
+- The Activate ("Use") key hint - e.g. `(E)` - is now colored sky blue on **every** interaction
   prompt game-wide (workstations, doors, pickups, vehicles, NPCs, dew collectors, containers, and
   more), not just loot prompts. Done at the source via a Harmony patch on the key-binding markup,
   so it also follows your Use-key rebinding. Other key hints (reload, jump, …) are left untouched.
 
 ### 1.1.0
-- Game-wide color-coded loot prompts (colorblind-safe Okabe–Ito palette; green/orange/gray for
+- Game-wide color-coded loot prompts (colorblind-safe Okabe-Ito palette; green/orange/gray for
   untouched/opened/empty, distinct red/green for locked/unlocked doors). Editable in
   `Config/Localization.csv`.
 - Full humanoid-zombie coverage via keyword detection: every vanilla type and all tiers

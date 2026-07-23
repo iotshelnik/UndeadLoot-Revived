@@ -13,11 +13,7 @@ using UnityEngine;
 //
 // v1.3.0 adds instanced multiplayer loot: each player who opens a zombie corpse gets
 // their own personal loot roll from the same body. The bag contents are swapped in and
-// out per player at open/close time — no extra entity, block, or bag is ever spawned.
-//
-// If InstancedLoot by Kobonator is also installed, our instancing patches are skipped
-// and that mod handles per-player distribution instead. The two mods complement each
-// other: UndeadLoot provides the lootable corpse, InstancedLoot provides instancing.
+// out per player at open/close time - no extra entity, block, or bag is ever spawned.
 
 namespace UndeadLoot
 {
@@ -114,7 +110,7 @@ namespace UndeadLoot
                 if (_lockingEntityIdField != null)
                     Debug.Log("[UndeadLoot] LockManager locking-player field: " + _lockingEntityIdField.Name);
                 else
-                    Debug.Log("[UndeadLoot] LockManager locking-player field not found — dedicated-server instancing uses primary-player fallback.");
+                    Debug.Log("[UndeadLoot] LockManager locking-player field not found - dedicated-server instancing uses primary-player fallback.");
             }
             if (_lockingEntityIdField == null) return -1;
             try { return Convert.ToInt32(_lockingEntityIdField.GetValue(LockManager.Instance)); }
@@ -297,7 +293,7 @@ namespace UndeadLoot
 
                 int slots = Mathf.Max(lc.size.x * lc.size.y, 8);
 
-                // Empty bag — each player's loot is generated on their first open.
+                // Empty bag - each player's loot is generated on their first open.
                 Bag bag = new Bag(slots);
                 bag.SetSlots(ItemStack.CreateArray(slots));
                 InstancedCorpseLoot.Register(entity.entityId);
@@ -337,7 +333,7 @@ namespace UndeadLoot
                 {
                     InstancedCorpseLoot.SetPendingLock(__instance.entityId, _playerFocusing.entityId);
                     InstancedCorpseLoot.MarkOpened(__instance.entityId, _playerFocusing.entityId);
-                    // NOTE: SetClientLock is NOT called here — LockRequestLocal may internally
+                    // NOTE: SetClientLock is NOT called here - LockRequestLocal may internally
                     // call UnlockRequestLocal to release a previous lock, which would consume
                     // the entity ID before the player actually closes the bag. SetClientLock is
                     // called in OnLockedLocal once the lock is confirmed.
@@ -352,7 +348,7 @@ namespace UndeadLoot
 
     // -----------------------------------------------------------------------
     // Client unlock: save remaining bag items the moment the player closes
-    // the loot window — before the server receives the unlock and resets the bag.
+    // the loot window - before the server receives the unlock and resets the bag.
     // This removes the one-lag on orange -> gray: gray shows immediately after
     // the player takes the last item and closes, no extra re-open needed.
     // -----------------------------------------------------------------------
@@ -399,9 +395,9 @@ namespace UndeadLoot
                 if (!InstancedCorpseLoot.IsRegistered(entityId)) return;
 
                 // Player resolution priority:
-                // 1. Pending dict — set in OnEntityActivated (SP + listen-server host).
-                // 2. LockManager reflection — covers dedicated-server remote clients.
-                // 3. Primary player — guaranteed in SP, correct for host in listen-server.
+                // 1. Pending dict - set in OnEntityActivated (SP + listen-server host).
+                // 2. LockManager reflection - covers dedicated-server remote clients.
+                // 3. Primary player - guaranteed in SP, correct for host in listen-server.
                 int playerId = InstancedCorpseLoot.ConsumePendingLock(entityId);
                 if (playerId < 0) playerId = InstancedCorpseLoot.TryGetLockingPlayerFromManager();
                 if (playerId < 0) playerId = ea.world?.GetPrimaryPlayer()?.entityId ?? -1;

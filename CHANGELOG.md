@@ -17,7 +17,7 @@
 ## 1.3.0
 
 - **Instanced multiplayer loot.** Each player who opens a zombie corpse now gets their own
-  personal loot roll from the same body. Players no longer compete over shared bag contents —
+  personal loot roll from the same body. Players no longer compete over shared bag contents  - 
   one player taking items has no effect on what another player finds. The body stays the body:
   no bag, block, or entity is spawned. The loot is generated lazily on each player's first
   open and saved across re-opens (remaining items persist if they close and re-open the body).
@@ -51,7 +51,7 @@
 
 ## 1.1.0
 
-- Added game-wide color-coded loot prompts using the colorblind-safe Okabe–Ito palette.
+- Added game-wide color-coded loot prompts using the colorblind-safe Okabe-Ito palette.
 - Added full humanoid-zombie and modded-zombie coverage.
 - Added themed loot tables for Hazmat and Wight zombies.
 
