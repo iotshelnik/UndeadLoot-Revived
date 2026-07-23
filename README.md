@@ -56,7 +56,7 @@ requires code, so this version ships a small Harmony DLL.
 
 | Mod | Works together? | Notes |
 |---|---|---|
-| **InstancedLoot** by Kobonator | ✅ Yes | UndeadLoot detects it and skips its own instancing; InstancedLoot handles per-player distribution. Both mods complement each other. |
+| **InstancedLoot** by Kobonator | ✅ Yes | No conflict. InstancedLoot handles regular containers; UndeadLoot handles zombie corpses (which InstancedLoot doesn't touch). Install both for full coverage across all loot types. |
 | Mods that add new zombie types | ✅ Yes | New zombies are looted automatically via the generic table, or themed by class name. |
 | ColoredLootText / similar | ⚠️ Conflict | Both fight over the same loot prompt strings. Don't use together. |
 
@@ -89,6 +89,9 @@ The compiled `UndeadLoot.dll` is copied into `../UndeadLoot/`. Zip the `UndeadLo
   link to the original source."* See [LICENSE](LICENSE).
 
 ## Changelog
+
+### 1.3.1
+- Fixed activation text staying orange after taking all items — prompt now goes gray immediately on close.
 
 ### 1.3.0
 - **Instanced multiplayer loot** — each player gets their own independent loot roll per corpse.

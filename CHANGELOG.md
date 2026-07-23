@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.1
+
+- Fixed activation text staying orange after the player took all items from a corpse. The
+  prompt now transitions to gray immediately when the bag is closed empty, with no extra
+  re-open required.
+- Fixed `ReadBagSlots` always returning null: replaced reflection field guessing with a
+  direct `bag.GetSlots()` call.
+- Fixed client-lock tracking being consumed prematurely by internal unlock calls during
+  lock acquisition. The client lock is now captured in `OnLockedLocal` (after the lock is
+  confirmed) rather than in `OnEntityActivated`.
+- Removed incorrect InstancedLoot compatibility shim. InstancedLoot does not handle zombie
+  corpses, so UndeadLoot always runs its own per-player instancing. The two mods cover
+  different loot types and work side by side without conflict.
+
 ## 1.3.0
 
 - **Instanced multiplayer loot.** Each player who opens a zombie corpse now gets their own

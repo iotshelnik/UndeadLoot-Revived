@@ -23,20 +23,9 @@ namespace UndeadLoot
 {
     public class UndeadLootMod : IModApi
     {
-        // True when InstancedLoot by Kobonator is loaded alongside us.
-        internal static bool InstancedLootPresent;
-
         public void InitMod(Mod _modInstance)
         {
-            Debug.Log("[UndeadLoot] Initializing (v1.3.0 lootable dead bodies + instanced MP loot)...");
-
-            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (asm.GetName().Name != "InstancedLoot") continue;
-                InstancedLootPresent = true;
-                Debug.Log("[UndeadLoot] InstancedLoot detected — per-player loot deferred to that mod.");
-                break;
-            }
+            Debug.Log("[UndeadLoot] Initializing (v1.3.1 lootable dead bodies + instanced MP loot)...");
 
             new Harmony("com.7modstodead.undeadloot").PatchAll(Assembly.GetExecutingAssembly());
 
@@ -66,9 +55,10 @@ namespace UndeadLoot
         private static readonly Dictionary<int, int> _pendingLock =
             new Dictionary<int, int>();
 
-        // Reflection cache: Bag internal slots field
-        private static FieldInfo _bagSlotsField;
-        private static bool _bagSlotsSearched;
+        // Entity ID the LOCAL player currently has open (client-side only).
+        // Set in OnEntityActivated, consumed in UnlockRequestLocal so we can
+        // read remaining items before the server resets the bag.
+        private static int _clientLockedEntityId = -1;
 
         // Reflection cache: LockManager locking-player field (dedicated-server support)
         private static FieldInfo _lockingEntityIdField;
@@ -84,6 +74,17 @@ namespace UndeadLoot
             if (!_pendingLock.TryGetValue(entityId, out int pid)) return -1;
             _pendingLock.Remove(entityId);
             return pid;
+        }
+
+        // ---- client lock tracking (for UnlockRequestLocal) ----
+
+        public static void SetClientLock(int entityId) => _clientLockedEntityId = entityId;
+
+        public static int ConsumeClientLock()
+        {
+            int id = _clientLockedEntityId;
+            _clientLockedEntityId = -1;
+            return id;
         }
 
         // ---- current locker (server-side, lives between OnLockedServer / OnUnlockedServer) ----
@@ -133,10 +134,25 @@ namespace UndeadLoot
         public static bool HasOpened(int entityId, int playerId)
             => _loot.TryGetValue(entityId, out var pd) && pd.ContainsKey(playerId);
 
+        // Mark the body as opened by this player (client-side, immediate).
+        // Uses a null sentinel so HasOpened returns true before OnLockedLocal
+        // has a chance to save the actual bag contents.
+        public static void MarkOpened(int entityId, int playerId)
+        {
+            if (!_loot.TryGetValue(entityId, out var pd))
+            {
+                pd = new Dictionary<int, ItemStack[]>();
+                _loot[entityId] = pd;
+            }
+            if (!pd.ContainsKey(playerId))
+                pd[playerId] = null; // null = opened, bag contents not yet saved client-side
+        }
+
         public static bool IsEmptyForPlayer(int entityId, int playerId)
         {
             if (!_loot.TryGetValue(entityId, out var pd)) return false;
             if (!pd.TryGetValue(playerId, out var items)) return false;
+            if (items == null) return false; // null sentinel = opened but contents unknown
             foreach (var s in items) if (s != null && !s.IsEmpty()) return false;
             return true;
         }
@@ -176,23 +192,12 @@ namespace UndeadLoot
             _loot.Clear();
             _currentLocker.Clear();
             _pendingLock.Clear();
+            _clientLockedEntityId = -1;
         }
 
-        // ---- bag slot access via reflection ----
+        // ---- bag slot access ----
 
-        public static ItemStack[] ReadBagSlots(Bag bag)
-        {
-            if (bag == null) return null;
-            if (!_bagSlotsSearched)
-            {
-                _bagSlotsSearched = true;
-                _bagSlotsField =
-                    AccessTools.Field(typeof(Bag), "slots") ??
-                    AccessTools.Field(typeof(Bag), "_slots") ??
-                    AccessTools.Field(typeof(Bag), "m_slots");
-            }
-            return _bagSlotsField?.GetValue(bag) as ItemStack[];
-        }
+        public static ItemStack[] ReadBagSlots(Bag bag) => bag?.GetSlots();
 
         // ---- loot generation ----
 
@@ -291,31 +296,11 @@ namespace UndeadLoot
                 if (lc == null) { Debug.LogWarning("[UndeadLoot] loot container missing: " + lootName); return; }
 
                 int slots = Mathf.Max(lc.size.x * lc.size.y, 8);
-                Bag bag;
 
-                if (UndeadLootMod.InstancedLootPresent)
-                {
-                    // InstancedLoot is installed — fill the bag normally so IL can instance it.
-                    GameRandom rand = entity.rand;
-                    if (rand == null) return;
-                    EntityPlayer player = world.GetPrimaryPlayer();
-                    int lootStage = player != null ? player.GetHighestPartyLootStage(0f, 0f) : 1;
-                    List<ItemStack> items = lc.Spawn(rand, 100, lootStage, 0f, player,
-                        FastTags<TagGroup.Global>.none, true, false, true);
-                    if (items != null && items.Count > slots) slots = items.Count;
-                    ItemStack[] arr = ItemStack.CreateArray(slots);
-                    if (items != null)
-                        for (int i = 0; i < items.Count && i < slots; i++) arr[i] = items[i];
-                    bag = new Bag(slots);
-                    bag.SetSlots(arr);
-                }
-                else
-                {
-                    // Instanced mode: empty bag — loot is generated per player on their first open.
-                    bag = new Bag(slots);
-                    bag.SetSlots(ItemStack.CreateArray(slots));
-                    InstancedCorpseLoot.Register(entity.entityId);
-                }
+                // Empty bag — each player's loot is generated on their first open.
+                Bag bag = new Bag(slots);
+                bag.SetSlots(ItemStack.CreateArray(slots));
+                InstancedCorpseLoot.Register(entity.entityId);
 
                 entity.bag = bag;
                 entity.lootList = lootName;
@@ -348,13 +333,52 @@ namespace UndeadLoot
                 // Store the local player ID so OnLockedServer can retrieve it (works for SP
                 // and the host in a listen-server game; dedicated-server remote clients use
                 // the LockManager reflection fallback in Patch_OnLockedServer).
-                if (!UndeadLootMod.InstancedLootPresent && _playerFocusing != null)
+                if (_playerFocusing != null)
+                {
                     InstancedCorpseLoot.SetPendingLock(__instance.entityId, _playerFocusing.entityId);
+                    InstancedCorpseLoot.MarkOpened(__instance.entityId, _playerFocusing.entityId);
+                    // NOTE: SetClientLock is NOT called here — LockRequestLocal may internally
+                    // call UnlockRequestLocal to release a previous lock, which would consume
+                    // the entity ID before the player actually closes the bag. SetClientLock is
+                    // called in OnLockedLocal once the lock is confirmed.
+                }
 
                 var ctx = new Entity.EntityLockContext(_command.commandId, __instance.bag);
                 LockRequest.Invoke(LockManager.Instance, new object[] { __instance, ctx, (ushort)0 });
             }
             catch (Exception e) { Debug.LogWarning("[UndeadLoot] activation failed: " + e); }
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Client unlock: save remaining bag items the moment the player closes
+    // the loot window — before the server receives the unlock and resets the bag.
+    // This removes the one-lag on orange -> gray: gray shows immediately after
+    // the player takes the last item and closes, no extra re-open needed.
+    // -----------------------------------------------------------------------
+
+    [HarmonyPatch(typeof(LockManager), "UnlockRequestLocal")]
+    public static class Patch_UnlockRequestLocal
+    {
+        public static void Prefix()
+        {
+            try
+            {
+                int entityId = InstancedCorpseLoot.ConsumeClientLock();
+                if (entityId < 0) return;
+
+                EntityPlayerLocal player = GameManager.Instance?.World?.GetPrimaryPlayer();
+                if (player == null) return;
+
+                Entity entity = GameManager.Instance?.World?.GetEntity(entityId);
+                if (!(entity is EntityAlive ea) || !Corpse.IsLootableBody(ea)) return;
+                if (!InstancedCorpseLoot.IsRegistered(entityId)) return;
+
+                ItemStack[] remaining = InstancedCorpseLoot.ReadBagSlots(ea.bag);
+                if (remaining != null)
+                    InstancedCorpseLoot.SaveItems(entityId, player.entityId, remaining);
+            }
+            catch (Exception e) { Debug.LogWarning("[UndeadLoot] UnlockRequestLocal failed: " + e); }
         }
     }
 
@@ -369,7 +393,6 @@ namespace UndeadLoot
         {
             try
             {
-                if (UndeadLootMod.InstancedLootPresent) return;
                 if (!(__instance is EntityAlive ea) || !Corpse.IsLootableBody(ea)) return;
 
                 int entityId = __instance.entityId;
@@ -397,6 +420,39 @@ namespace UndeadLoot
     }
 
     // -----------------------------------------------------------------------
+    // Client lock: sync bag state into the client-side dict when bag opens
+    // -----------------------------------------------------------------------
+    // OnLockedLocal fires on the client after the server has swapped in the
+    // player's personal loot and synced the entity bag. Reading the bag here
+    // gives us the accurate remaining-item snapshot so GetActivationText can
+    // transition from orange to gray once the bag is truly empty.
+
+    [HarmonyPatch(typeof(Entity), "OnLockedLocal")]
+    public static class Patch_OnLockedLocal
+    {
+        public static void Postfix(Entity __instance)
+        {
+            try
+            {
+                if (!(__instance is EntityAlive ea) || !Corpse.IsLootableBody(ea)) return;
+                if (!InstancedCorpseLoot.IsRegistered(__instance.entityId)) return;
+
+                EntityPlayerLocal player = GameManager.Instance?.World?.GetPrimaryPlayer();
+                if (player == null) return;
+
+                ItemStack[] items = InstancedCorpseLoot.ReadBagSlots(ea.bag);
+                if (items != null)
+                    InstancedCorpseLoot.SaveItems(__instance.entityId, player.entityId, items);
+
+                // Set client lock HERE (after lock is confirmed) so UnlockRequestLocal
+                // captures the close, not a spurious internal unlock during lock acquisition.
+                InstancedCorpseLoot.SetClientLock(__instance.entityId);
+            }
+            catch (Exception e) { Debug.LogWarning("[UndeadLoot] OnLockedLocal failed: " + e); }
+        }
+    }
+
+    // -----------------------------------------------------------------------
     // Server unlock: save remaining items, reset bag to empty for next player
     // -----------------------------------------------------------------------
 
@@ -407,7 +463,6 @@ namespace UndeadLoot
         {
             try
             {
-                if (UndeadLootMod.InstancedLootPresent) return;
                 if (!(__instance is EntityAlive ea) || !Corpse.IsLootableBody(ea)) return;
 
                 int entityId = __instance.entityId;
@@ -439,27 +494,13 @@ namespace UndeadLoot
         {
             if (!Corpse.IsLootableBody(__instance)) return true;
 
-            EntityAlive ea = (EntityAlive)__instance;
             string name = __instance.LocalizedEntityName;
 
-            bool isEmpty, untouched;
-
-            if (!UndeadLootMod.InstancedLootPresent && InstancedCorpseLoot.IsRegistered(__instance.entityId))
-            {
-                // Instanced mode: show state relative to the local player only.
-                EntityPlayerLocal localPlayer = GameManager.Instance?.World?.GetPrimaryPlayer();
-                int pid = localPlayer?.entityId ?? -1;
-                bool hasOpened = pid >= 0 && InstancedCorpseLoot.HasOpened(__instance.entityId, pid);
-                untouched = !hasOpened;
-                isEmpty   = hasOpened && InstancedCorpseLoot.IsEmptyForPlayer(__instance.entityId, pid);
-            }
-            else
-            {
-                // InstancedLoot present (or fallback): use the shared bag state as before.
-                Bag bag = ea.bag;
-                isEmpty  = bag.IsEmpty();
-                untouched = !isEmpty && !bag.Touched;
-            }
+            EntityPlayerLocal localPlayer = GameManager.Instance?.World?.GetPrimaryPlayer();
+            int pid = localPlayer?.entityId ?? -1;
+            bool hasOpened = pid >= 0 && InstancedCorpseLoot.HasOpened(__instance.entityId, pid);
+            bool untouched = !hasOpened;
+            bool isEmpty   = hasOpened && InstancedCorpseLoot.IsEmptyForPlayer(__instance.entityId, pid);
 
             string keyHint = string.Empty;
             if (!isEmpty)
