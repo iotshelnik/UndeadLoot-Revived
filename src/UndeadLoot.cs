@@ -106,10 +106,10 @@ namespace UndeadLoot
             {
                 _lockingFieldSearched = true;
                 _lockingEntityIdField =
-                    AccessTools.Field(typeof(LockManager), "_lockingEntityId") ??
-                    AccessTools.Field(typeof(LockManager), "lockingEntityId") ??
+                    AccessTools.Field(typeof(LockManager), "_lockingPlayerID") ??
                     AccessTools.Field(typeof(LockManager), "_lockingPlayerId") ??
-                    AccessTools.Field(typeof(LockManager), "lockingPlayerId");
+                    AccessTools.Field(typeof(LockManager), "_lockingEntityId") ??
+                    AccessTools.Field(typeof(LockManager), "lockingEntityId");
                 if (_lockingEntityIdField != null)
                     Debug.Log("[UndeadLoot] LockManager locking-player field: " + _lockingEntityIdField.Name);
                 else
