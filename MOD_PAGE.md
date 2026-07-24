@@ -29,7 +29,8 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
 
 ## Compatibility
 
-**Works with InstancedLoot by Kobonator.** The two mods cover different things and don't conflict. InstancedLoot handles per-player instancing for regular containers (chests, bags, boxes). UndeadLoot handles zombie corpses, which InstancedLoot doesn't touch. Install both for complete per-player loot coverage across every loot type in the game.
+- Works alongside other mods that add new zombie types - they are looted automatically.
+- Do not run with mods that recolor loot text (e.g. ColoredLootText) - they fight over the same strings.
 
 ## Requirements
 
@@ -60,7 +61,6 @@ Kill a zombie, walk up to its corpse, and search it like any other container. No
 **1.3.0**
 - Instanced multiplayer loot: each player gets their own independent loot roll per corpse. Loot is generated on first open, saved on close, cleared on world restart.
 - Activation text now shows per-player state rather than shared bag state.
-- Auto-detects InstancedLoot by Kobonator; instancing patches are skipped when it is present so both mods cooperate without conflict.
 
 **1.2.2**
 - Fixed dedicated-server multiplayer: remote clients can now see the Use prompt and loot zombie bodies. The server remains authoritative for corpse locking and loot synchronization.
